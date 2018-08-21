@@ -1,0 +1,8 @@
+# Keep common instructions at the top of the Dockerfile to utilize the cache.
+ARG VERSION=apache
+FROM php:$VERSION
+
+WORKDIR /var/www/html
+
+COPY app/ /var/www/html/
+# COPY php.ini  /usr/local/etc/php/

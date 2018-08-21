@@ -1,0 +1,57 @@
+version: '2.4' # Cant use 3+ because it does not support resource-limits without swarm-mode: https://github.com/docker/compose/issues/4513
+
+services:
+
+  phpapache:
+    mem_limit: ${SHIPY_STACK_SERVICE_1_MEMORY_LIMIT:-1000000000}
+    build:
+      context: ./
+      dockerfile: Dockerfile.phpapache
+      args:
+        VERSION: ${SHIPY_STACK_SERVICE_1_VERSION:-apache}
+    restart: always
+    expose:
+      - "80"
+    labels:
+      # shipy labels must be present on all services
+      # shipy.stack.id must be equal the name of the repository
+      - "shipy.stack.id=${COMPOSE_PROJECT_NAME:?err}"
+      - "shipy.stack.name=${COMPOSE_PROJECT_NAME:?err}"
+      - "shipy.stack.domains=${SHIPY_STACK_DOMAINS:?err}"
+      - "shipy.stack.json=${SHIPY_STACK_JSON:?err}"
+      - "shipy.stack.service.number=1"
+      - "shipy.stack.service.name=${COMPOSE_PROJECT_NAME:?err}_phpapache"
+      - "shipy.stack.service.version=${SHIPY_STACK_SERVICE_1_VERSION:-apache}"
+      # https://docs.traefik.io/configuration/backends/docker/
+      - "traefik.enable=true"
+      - "traefik.backend=${COMPOSE_PROJECT_NAME:?err}_phpapache"
+      - "traefik.backend.loadbalancer.stickiness=true"
+      - "traefik.docker.network=reverseproxy"
+      #- "traefik.frontend.passHostHeader=true"
+      - "traefik.${COMPOSE_PROJECT_NAME:?err}_phpapache.frontend.passHostHeader=true"
+      - "traefik.${COMPOSE_PROJECT_NAME:?err}_phpapache.port=80"
+      - "traefik.${COMPOSE_PROJECT_NAME:?err}_phpapache.frontend.rule=Host:${SHIPY_STACK_DOMAINS:?err}"
+    networks:
+      - reverseproxy
+      - database
+    env_file:
+      - .env
+    # environment overrides env_files vars
+    environment:
+      - PORT=8080
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      interval: 10s
+      timeout: 30s
+      retries: 3
+      #start_period: 5s
+    # command:
+      # - start
+
+networks:
+  reverseproxy:
+    external: true
+    name: reverseproxy
+  database:
+    external: true
+    name: database # named networks will not get removed on container update/removal

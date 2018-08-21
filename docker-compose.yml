@@ -53,8 +53,8 @@ services:
       # - start
 
 volumes:
-  apacheconf:
-  apachedata:
+  phpapacheconf:
+  phpapachedata:
 
 networks:
   reverseproxy:

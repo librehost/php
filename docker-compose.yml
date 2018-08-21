@@ -28,9 +28,10 @@ services:
       - "traefik.backend.loadbalancer.stickiness=true"
       - "traefik.docker.network=reverseproxy"
       #- "traefik.frontend.passHostHeader=true"
-      - "traefik.${COMPOSE_PROJECT_NAME:?err}_phpapache.frontend.passHostHeader=true"
       - "traefik.${COMPOSE_PROJECT_NAME:?err}_phpapache.port=80"
+      - "traefik.${COMPOSE_PROJECT_NAME:?err}_phpapache.frontend.passHostHeader=true"
       - "traefik.${COMPOSE_PROJECT_NAME:?err}_phpapache.frontend.rule=Host:${SHIPY_STACK_DOMAINS:?err}"
+      - "traefik.${COMPOSE_PROJECT_NAME:?err}_phpapache.frontend.headers.customResponseHeaders=X-Forwarded-Proto:https"
     networks:
       - reverseproxy
       - database

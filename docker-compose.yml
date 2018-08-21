@@ -49,6 +49,10 @@ services:
     # command:
       # - start
 
+volumes:
+  apacheconf:
+  apachedata:
+
 networks:
   reverseproxy:
     external: true

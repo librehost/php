@@ -35,6 +35,9 @@ services:
     networks:
       - reverseproxy
       - database
+    volumes:
+      - phpapacheconf:/usr/local/etc/php
+      - phpapachedata:/var/www/html
     env_file:
       - .env
     # environment overrides env_files vars

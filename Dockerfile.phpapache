@@ -47,3 +47,5 @@ WORKDIR /var/www/html
 
 COPY app/ /var/www/html/
 # COPY php.ini  /usr/local/etc/php/
+
+RUN chown -R www-data:www-data /var/www/html

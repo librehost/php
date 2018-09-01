@@ -16,11 +16,13 @@ services:
       # shipy labels must be present on all services
       # shipy.stack.id must be equal the name of the repository
       - "shipy.stack.id=${COMPOSE_PROJECT_NAME:?err}"
-      - "shipy.stack.name=${COMPOSE_PROJECT_NAME:?err}"
+      - "shipy.stack.type=${SHIPY_STACK_TYPE:?err}"
+      - "shipy.stack.name=${SHIPY_STACK_NAME:?err}"
       - "shipy.stack.domains=${SHIPY_STACK_DOMAINS:?err}"
+      - "shipy.stack.updated=${SHIPY_STACK_UPDATED:?err}"
       - "shipy.stack.json=${SHIPY_STACK_JSON:?err}"
       - "shipy.stack.service.number=1"
-      - "shipy.stack.service.name=${COMPOSE_PROJECT_NAME:?err}_phpapache"
+      - "shipy.stack.service.name=phpapache"
       - "shipy.stack.service.version=${SHIPY_STACK_SERVICE_1_VERSION:-apache}"
       # https://docs.traefik.io/configuration/backends/docker/
       - "traefik.enable=true"

@@ -37,7 +37,7 @@ services:
     networks:
       - reverseproxy
       - database
-     volumes:
+    volumes:
       - phpconf:/usr/local/etc/php
     env_file:
       - .env

@@ -32,11 +32,13 @@ RUN set -ex; \
 	pecl install APCu-5.1.11; \
 	pecl install geoip-1.1.1; \
 	pecl install redis-3.1.6; \
+	pecl install mongodb-1.2.2; \
 	\
 	docker-php-ext-enable \
 		apcu \
 		geoip \
 		redis \
+		mongodb \
 	; \
 	\
 # reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies

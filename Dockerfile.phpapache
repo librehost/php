@@ -10,6 +10,7 @@ RUN set -ex; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends \
 		pkg-config \
+		libssl-dev \
 		libjpeg-dev \
 		libpng-dev \
 		libfreetype6-dev \

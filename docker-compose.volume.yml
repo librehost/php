@@ -1,0 +1,9 @@
+version: '2.4' # Cant use 3+ because it does not support resource-limits without swarm-mode: https://github.com/docker/compose/issues/4513
+
+services:
+  phpapache:
+    volumes:
+      - phpdata:${SHIPY_OPTIONAL_VOLUME:-/var/www/html}
+
+volumes:
+  phpdata:

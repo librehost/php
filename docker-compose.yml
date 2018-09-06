@@ -37,6 +37,8 @@ services:
     networks:
       - reverseproxy
       - database
+     volumes:
+      - phpconf:/usr/local/etc/php
     env_file:
       - .env
     # environment overrides env_files vars
@@ -58,3 +60,6 @@ networks:
   database:
     external: true
     name: database # named networks will not get removed on container update/removal
+
+volumes:
+  phpconf:

@@ -35,8 +35,14 @@ services:
       - "traefik.${COMPOSE_PROJECT_NAME:?err}_phpapache.frontend.rule=Host:${SHIPY_STACK_DOMAINS:?err}"
       - "traefik.${COMPOSE_PROJECT_NAME:?err}_phpapache.frontend.headers.customResponseHeaders=X-Forwarded-Proto:https"
     networks:
-      - reverseproxy
-      - database
+      reverseproxy:
+        aliases:
+         # alias with pattern PROJECTNAME_SERVICENAME must be present on all networks
+         - ${COMPOSE_PROJECT_NAME:?err}_phpapache
+      database:
+        aliases:
+         # alias with pattern PROJECTNAME_SERVICENAME must be present on all networks
+         - ${COMPOSE_PROJECT_NAME:?err}_phpapache
     volumes:
       - phpconf:/usr/local/etc/php
     env_file:

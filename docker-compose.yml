@@ -2,11 +2,11 @@ version: '2.4' # Cant use 3+ because it does not support resource-limits without
 
 services:
 
-  phpapache:
+  php:
     mem_limit: ${SHIPY_STACK_SERVICE_1_MEMORY_LIMIT:-1000000000}
     build:
       context: ./
-      dockerfile: Dockerfile.phpapache
+      dockerfile: Dockerfile.php
       args:
         VERSION: ${SHIPY_STACK_SERVICE_1_VERSION:-apache}
     restart: always
@@ -22,27 +22,27 @@ services:
       - "shipy.stack.updated=${SHIPY_STACK_UPDATED:?err}"
       - "shipy.stack.json=${SHIPY_STACK_JSON:?err}"
       - "shipy.stack.service.number=1"
-      - "shipy.stack.service.name=phpapache"
+      - "shipy.stack.service.name=php"
       - "shipy.stack.service.version=${SHIPY_STACK_SERVICE_1_VERSION:-apache}"
       # https://docs.traefik.io/configuration/backends/docker/
       - "traefik.enable=true"
-      - "traefik.backend=${COMPOSE_PROJECT_NAME:?err}_phpapache"
+      - "traefik.backend=${COMPOSE_PROJECT_NAME:?err}_php"
       - "traefik.backend.loadbalancer.stickiness=true"
       - "traefik.docker.network=reverseproxy"
       #- "traefik.frontend.passHostHeader=true"
-      - "traefik.${COMPOSE_PROJECT_NAME:?err}_phpapache.port=80"
-      - "traefik.${COMPOSE_PROJECT_NAME:?err}_phpapache.frontend.passHostHeader=true"
-      - "traefik.${COMPOSE_PROJECT_NAME:?err}_phpapache.frontend.rule=Host:${SHIPY_STACK_DOMAINS:?err}"
-      - "traefik.${COMPOSE_PROJECT_NAME:?err}_phpapache.frontend.headers.customResponseHeaders=X-Forwarded-Proto:https"
+      - "traefik.${COMPOSE_PROJECT_NAME:?err}_php.port=80"
+      - "traefik.${COMPOSE_PROJECT_NAME:?err}_php.frontend.passHostHeader=true"
+      - "traefik.${COMPOSE_PROJECT_NAME:?err}_php.frontend.rule=Host:${SHIPY_STACK_DOMAINS:?err}"
+      - "traefik.${COMPOSE_PROJECT_NAME:?err}_php.frontend.headers.customResponseHeaders=X-Forwarded-Proto:https"
     networks:
       reverseproxy:
         aliases:
          # alias with pattern PROJECTNAME_SERVICENAME must be present on all networks
-         - ${COMPOSE_PROJECT_NAME:?err}_phpapache
+         - ${COMPOSE_PROJECT_NAME:?err}_php
       database:
         aliases:
          # alias with pattern PROJECTNAME_SERVICENAME must be present on all networks
-         - ${COMPOSE_PROJECT_NAME:?err}_phpapache
+         - ${COMPOSE_PROJECT_NAME:?err}_php
     volumes:
       - phpconf:/usr/local/etc/php
     env_file:
